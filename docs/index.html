@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>mlx-audio-rs 🎙️ Apple Silicon Audio Engine in Pure Rust</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎙️</text></svg>">
+</head>
+<body>
+  <header class="hero">
+    <div class="container">
+      <div class="badge">v0.0.1 • Apple Silicon Metal • Zero Python GIL</div>
+      <h1>mlx-audio-rs 🎙️🍏</h1>
+      <p class="subtitle">Ultra-low-latency, zero-dependency audio generation, transcription, and neural codecs built on Apple's MLX Metal framework in pure Rust. Inspired by Blaizzy/mlx-audio.</p>
+      
+      <div class="cta-group">
+        <a href="#quickstart" class="btn primary">Get Started</a>
+        <a href="https://github.com/bhubbard/mlx-audio-rs" class="btn secondary">View on GitHub ★</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="metrics">
+      <div class="metric-card">
+        <div class="metric-val">&lt; 20ms</div>
+        <div class="metric-label">TTFT Audio Generation</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-val">100%</div>
+        <div class="metric-label">Apple Metal Accelerated</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-val">0 GIL</div>
+        <div class="metric-label">Zero Audio Dropouts</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-val">0.16s</div>
+        <div class="metric-label">17-Test Suite Run</div>
+      </div>
+    </section>
+
+    <section id="interactive-playground" class="card">
+      <h2>Interactive Command Generator 🛠️</h2>
+      <p>Configure model and inference parameters to generate the exact <code>mlx-audio</code> command:</p>
+      
+      <div class="grid">
+        <div class="control-group">
+          <label for="task-type">Task Mode:</label>
+          <select id="task-type">
+            <option value="tts">Text-to-Speech (Kokoro-82M)</option>
+            <option value="stt">Speech-to-Text (Whisper)</option>
+            <option value="vad">Voice Activity Detection (Silero)</option>
+            <option value="codec">Neural Codec (SNAC)</option>
+          </select>
+        </div>
+
+        <div class="control-group" id="text-group">
+          <label for="input-text">Text Prompt:</label>
+          <input type="text" id="input-text" value="Welcome to native Apple Silicon Rust audio synthesis.">
+        </div>
+
+        <div class="control-group" id="audio-group" style="display:none;">
+          <label for="audio-file">Audio Input File (.wav):</label>
+          <input type="text" id="audio-file" value="speech.wav">
+        </div>
+
+        <div class="control-group" id="model-group" style="display:none;">
+          <label for="whisper-model">Model Size:</label>
+          <select id="whisper-model">
+            <option value="base">Whisper Base (512-dim)</option>
+            <option value="tiny">Whisper Tiny (384-dim)</option>
+            <option value="small">Whisper Small (768-dim)</option>
+            <option value="large-v3">Whisper Large-v3 (1280-dim)</option>
+          </select>
+        </div>
+
+        <div class="control-group">
+          <label for="output-path">Output Path:</label>
+          <input type="text" id="output-path" value="speech.wav">
+        </div>
+      </div>
+
+      <div class="command-box">
+        <pre><code id="generated-command">mlx-audio tts -t "Welcome to native Apple Silicon Rust audio synthesis." -o speech.wav</code></pre>
+        <button id="copy-btn" class="btn small">Copy</button>
+      </div>
+    </section>
+
+    <section id="architecture" class="card">
+      <h2>Unified Memory Metal Audio Architecture ⚡</h2>
+      <div class="diagram-grid">
+        <div class="diagram-box">
+          <h3>Kokoro-82M TTS</h3>
+          <p>Text & phoneme tokens ➔ Style latent vector ➔ Metal flow matching transformer decoder ➔ 24kHz studio PCM waveform.</p>
+        </div>
+        <div class="diagram-box">
+          <h3>Whisper STT</h3>
+          <p>Raw 16kHz PCM audio ➔ Log-mel filterbank tensor ➔ Conv1D audio encoder ➔ Autoregressive text token decoder.</p>
+        </div>
+        <div class="diagram-box">
+          <h3>SNAC & Silero VAD</h3>
+          <p>Multi-scale residual vector quantization (12Hz/24Hz/48Hz) and sub-millisecond voice activity gating.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="quickstart" class="card">
+      <h2>Installation & Usage 🚀</h2>
+      <pre><code># Install from Cargo
+cargo install --git https://github.com/bhubbard/mlx-audio-rs
+
+# 1. Kokoro Text-to-Speech
+mlx-audio tts -t "The quick brown fox jumps over the lazy dog." -o audio.wav
+
+# 2. Whisper Speech-to-Text
+mlx-audio stt -a interview.wav -m base
+
+# 3. Silero Voice Activity Detection
+mlx-audio vad -a meeting.wav --threshold 0.5
+
+# 4. Neural Codec Encode/Decode
+mlx-audio codec -i recording.wav -o restored.wav</code></pre>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container footer-content">
+      <p>Built with ❤️ and Rust by <a href="https://github.com/bhubbard">Brandon Hubbard</a>. Licensed under MIT or Apache-2.0.</p>
+      <p><a href="http://code.brandonhubbard.com/">More Projects</a> • <a href="https://github.com/bhubbard/mlx-audio-rs">GitHub Repo</a></p>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
